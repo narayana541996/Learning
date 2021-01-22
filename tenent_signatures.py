@@ -52,41 +52,60 @@ for c in overlaps:
 if len(intersection_dict) == 0:
     print(len(segments))
     exit()
+    
+non_intersection_list = []
+for segment in segments:
+    non_intersect = True
+    for v in intersection_dict.values():
+        if segment in v:
+            non_intersect = False
+            break
+    if non_intersect:
+        non_intersection_list.append(segment)
 #print('intersection_dict: ',intersection_dict)
 signed = []
 m = []
 repeats = []
-while len(signed) < len(segments):
-    if intersection_dict:
-        longk = list(intersection_dict.keys())[0]
-        longv = list(intersection_dict.values())[0]
-        for k, v in intersection_dict.items():
-            if k not in m:
-                for seg in v:
-                    if seg in signed:
+while intersection_dict:
+    longk = list(intersection_dict.keys())[0]
+    longv = list(intersection_dict.values())[0]
+    for k, v in intersection_dict.items():
+        print('for loop')
+        if k not in m:
+            for seg in v:
+                if seg in signed:
                     #repeats += 1
-                        v.remove(seg)
-                    if len(v) == 0:
-                        repeats.append(k)
-                if len(v) >= len(longv):
-                    longv = v
-                    longk = k
+                    v.remove(seg)
+                if len(v) == 0:
+                    repeats.append(k)
+            if len(v) >= len(longv):
+                longv = v
+                longk = k
     
-        if longk not in m and longk not in repeats:
-            m.append(longk)
-        for key in repeats:
-            print('repeats key: ',key)
-            del intersection_dict[key]
-        print('repeats: ', repeats)
-        repeats.clear()
-        for seg in longv:
+    if longk not in m and longk not in repeats:
+        m.append(longk)
+    for key in repeats:
+        print('repeats key: ',key)
+        del intersection_dict[key]
+    print('repeats: ', repeats)
+        
+    for seg in longv:
         #if seg not in signed:
-            signed.append(seg)
-        print('signed: ', signed)
-        print('m: ', m)
-        print('loop intersection_dict: ',intersection_dict)
+        signed.append(seg)
+    print('signed: ', signed)
+    print('m: ', m)
+    print('loop intersection_dict: ',intersection_dict)
+    if longk not in repeats:
         del intersection_dict[longk]
+    repeats.clear()
     
+#print('non_intersection_list: ',non_intersection_list)
+for non_intersect_segment in non_intersection_list:
+    #print('non_intersect_segment: ',non_intersect_segment)
+    m.append(non_intersect_segment[0])
+print('final signed: ',signed)
+print('final segments: ',segments)
+print('final signed == segments: ', signed == segments)
 print(len(m))
 for i in m:
     print(i, end = ' ')
