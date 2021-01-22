@@ -1,0 +1,21 @@
+def sort(list):
+	for pivot in list:
+		pivot_index = index(pivot)
+		for item in list:
+			item_index = index(item)
+			if pivot_index < item_index and pivot > item:
+				insert(pivot_index + 1, item)
+			elif pivot_index > item_index and pivot < item:
+				insert(pivot_index - 1, item)
+			elif pivot == item:
+				insert(pivot_index + 1, item)
+	return list
+n = input
+ppc = list(input)
+avg_clicks = list(input)
+ppc = sort(ppc)
+avg_clicks = sort(avg_clicks)
+result = []
+for i in range(n):
+	result.append((ppc[i], avg_clicks[i]))
+print(sum(result))
